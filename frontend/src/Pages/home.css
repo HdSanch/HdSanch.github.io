@@ -1,0 +1,110 @@
+/* src/pages/home.css */
+.home-container {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .header-icons .icon {
+    margin-left: 15px;
+    font-size: 20px;
+  }
+  
+  .saldo-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+  }
+  
+  .saldo-monto {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  
+  .icono-ojo {
+    margin-left: 10px;
+    font-size: 20px;
+  }
+  
+  .servicios p {
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  
+  .servicios-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .servicio-item {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+    flex: 1;
+  }
+  
+  .nuevo {
+    background-color: #d1f3e0;
+    position: relative;
+  }
+  
+  .invitacion {
+    background: #eee;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  .botones-principales {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  
+  .btn-morado {
+    background: #6c47ff;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    flex: 1;
+    margin: 5px;
+    text-align: center;
+  }
+  
+  .menu-navegacion {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .menu-item {
+    font-size: 18px;
+    text-decoration: none;
+    color: gray;
+  }
+  
+  .activo {
+    font-weight: bold;
+    color: #6c47ff;
+  }
+  
