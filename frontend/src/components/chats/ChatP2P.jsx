@@ -181,29 +181,6 @@ const Chat = () => {
         };
         socket.send(JSON.stringify(messageData));
 
-        
-        // Si hay datos de imagen, añadirlos al mensaje
-        // if (imageData) {
-        //   messageData.imageData = imageData;
-        //   messageData.imageType = imageType;
-        // }
-        
-        // // Si es una solicitud de pago, añadir la información
-        // // if (isPaymentRequest) {
-        // //   messageData.isPaymentRequest = true;
-        // //   messageData.paymentAmount = paymentData.amount;
-        // //   messageData.transactionId = paymentData.internalTransactionReference;
-        // //   if (qrImage) {
-        // //     messageData.qrImage = qrImage;
-        // //   }
-        // // }
-        
-        // if (!customMessage) {
-        //   setInput("");
-        // }
-
-        // Si es una solicitud de pago, añadirla también localmente
-        // Este paso es necesario porque el servidor actual podría no manejar los nuevos campos
         if (isPaymentRequest) {
           setMessages((prevMessages) => [
             ...prevMessages,
