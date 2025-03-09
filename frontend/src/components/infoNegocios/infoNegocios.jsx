@@ -3,7 +3,7 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Star, Mail, Phone, ShoppingCart, ChevronDown, ChevronUp, Check } from "lucide-react";
 import tiendaIcon from "../../assets/icons8-tienda-96.png";
-import "./infoNegocios.css"; // Import the CSS file
+import "./infoNegocios.css"; 
 
 const InfoNegocios = () => {
   const [productos, setProductos] = useState([]);
@@ -16,7 +16,7 @@ const InfoNegocios = () => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
       .then((data) => {
-        setProductos(data.slice(0, 5)); // Limitando a 5 productos para ejemplo
+        setProductos(data.slice(0, 5)); 
         setLoading(false);
       })
       .catch(err => {
