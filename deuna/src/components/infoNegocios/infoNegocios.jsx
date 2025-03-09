@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { Star, Mail, Phone } from "lucide-react";
+import { Star, Mail, Phone, ShoppingCart, ChevronDown, ChevronUp, Check } from "lucide-react";
 import tiendaIcon from "../../assets/icons8-tienda-96.png";
+import "./infoNegocios.css"; // Import the CSS file
 
 const InfoNegocios = () => {
   const [productos, setProductos] = useState([]);
-  const [expandirProductos, setExpandirProductos] = useState(false);
+  const [expandirProductos, setExpandirProductos] = useState(true);
   const [expandirReseñas, setExpandirReseñas] = useState(false);
+  const [carrito, setCarrito] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
-      .then((data) => setProductos(data));
+      .then((data) => {
+        setProductos(data.slice(0, 5)); // Limitando a 5 productos para ejemplo
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching products:", err);
+        setLoading(false);
+      });
   }, []);
 
   const negocio = {
@@ -23,68 +33,141 @@ const InfoNegocios = () => {
     reseña: 4.5,
   };
 
+  const toggleProducto = (producto) => {
+    setCarrito((prevCarrito) => {
+      if (prevCarrito.some((item) => item.id === producto.id)) {
+        return prevCarrito.filter((item) => item.id !== producto.id);
+      } else {
+        return [...prevCarrito, producto];
+      }
+    });
+  };
+
+  const reseñas = [
+    { texto: "Gran tienda, excelente servicio y productos de calidad.", calificacion: 5, autor: "María G." },
+    { texto: "Buenos precios y envío rápido. Repetiré compra.", calificacion: 4, autor: "Carlos P." }
+  ];
+
   return (
-    <div className="p-6 w-full max-w-[375px] min-h-[714px] bg-white rounded-lg shadow-md border border-purple-500 flex flex-col items-center">
-      {/* Logo y Nombre del Negocio */}
-      <div className="flex flex-col items-center mb-4">
-        <img src={negocio.logo} alt="Logo" className="w-20 h-20 rounded-full mb-2 shadow-md" />
-        <h2 className="text-2xl font-bold text-purple-700">{negocio.nombre}</h2>
+    <div className="negocio-container">
+      {/* Encabezado y Logo */}
+      <div className="negocio-header">
+        <img src={negocio.logo} alt="Logo" className="negocio-logo" />
+        <div>
+          <h2 className="negocio-title">{negocio.nombre}</h2>
+          <div className="negocio-rating">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} 
+                    fill={i < Math.floor(negocio.reseña) ? "currentColor" : "none"} 
+                    className={`w-5 h-5 ${i < negocio.reseña ? "star-filled" : "star-empty"}`} />
+            ))}
+            <span className="rating-score">{negocio.reseña}</span>
+          </div>
+        </div>
       </div>
 
       {/* Información de Contacto */}
-      <div className="text-center text-purple-600 mb-4">
-        <div className="flex items-center justify-center gap-2">
-          <Mail size={18} /> <p className="text-sm">{negocio.contacto}</p>
+      <div className="contact-grid">
+        <div className="contact-item">
+          <Mail size={18} className="contact-icon" />
+          <span className="contact-text">{negocio.contacto}</span>
         </div>
-        <div className="flex items-center justify-center gap-2">
-          <Phone size={18} /> <p className="text-sm">{negocio.telefono}</p>
+        <div className="contact-item">
+          <Phone size={18} className="contact-icon" />
+          <span className="contact-text">{negocio.telefono}</span>
         </div>
       </div>
 
-      {/* Reseñas con Estrellas */}
-      <div className="flex items-center justify-center mb-4">
-        {[...Array(5)].map((_, i) => (
-          <Star key={i} className={`w-5 h-5 ${i < negocio.reseña ? "text-yellow-500" : "text-gray-300"}`} />
-        ))}
-        <span className="ml-2 text-sm text-purple-700">{negocio.reseña} / 5</span>
+      {/* Sección de Productos */}
+      <div className="products-container">
+        <button 
+          onClick={() => setExpandirProductos(!expandirProductos)}
+          className="toggle-button"
+        >
+          <span>Productos</span>
+          {expandirProductos ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        </button>
+        
+        {expandirProductos && (
+          <div className="products-list">
+            {loading ? (
+              <div className="loading-container">
+                <div className="loading-indicator"></div>
+                <p className="loading-text">Cargando productos...</p>
+              </div>
+            ) : (
+              productos.map((producto) => {
+                const isSelected = carrito.some(item => item.id === producto.id);
+                return (
+                  <div key={producto.id} 
+                      className={`product-item ${isSelected ? 'product-item-selected' : ''}`}
+                  >
+                    <button 
+                      onClick={() => toggleProducto(producto)}
+                      className={`product-checkbox ${isSelected ? 'product-checkbox-selected' : ''}`}
+                    >
+                      {isSelected && (
+                        <Check size={14} className="text-white" />
+                      )}
+                    </button>
+                    
+                    <div className="product-info">
+                      <h3 className="product-title">{producto.title}</h3>
+                      <p className="product-price">${producto.price}</p>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
       </div>
-
-      {/* Botones de Productos y Reseñas */}
-      <div className="flex flex-col gap-2 w-full px-4">
-        <Button onClick={() => setExpandirProductos(!expandirProductos)} className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2">
-          {expandirProductos ? "Ocultar Productos" : "Mostrar Productos"}
-        </Button>
-        <Button onClick={() => setExpandirReseñas(!expandirReseñas)} className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2">
-          {expandirReseñas ? "Ocultar Reseñas" : "Mostrar Reseñas"}
-        </Button>
-      </div>
-
-      {/* Lista de Productos */}
-      {expandirProductos && (
-        <div className="mt-4 grid grid-cols-1 gap-4 w-full px-4">
-          {productos.map((producto) => (
-            <Card key={producto.id} className="bg-purple-100 border-purple-500">
-              <CardContent>
-                <h3 className="text-md font-semibold text-purple-700">{producto.title}</h3>
-                <p className="text-purple-500">${producto.price}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
 
       {/* Sección de Reseñas */}
-      {expandirReseñas && (
-        <div className="mt-4 p-4 border rounded-lg bg-purple-100 border-purple-500 w-full px-4">
-          <p className="text-purple-700">"Gran tienda, excelente servicio y productos de calidad."</p>
-          <div className="flex items-center mt-2">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-5 h-5 ${i < 5 ? "text-yellow-500" : "text-gray-300"}`} />
+      <div className="reviews-container">
+        <button 
+          onClick={() => setExpandirReseñas(!expandirReseñas)}
+          className="toggle-button"
+        >
+          <span>Reseñas</span>
+          {expandirReseñas ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        </button>
+        
+        {expandirReseñas && (
+          <div className="reviews-list">
+            {reseñas.map((reseña, index) => (
+              <div key={index} className="review-item">
+                <p className="review-text">"{reseña.texto}"</p>
+                <div className="review-footer">
+                  <div className="review-stars">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={14} 
+                            fill={i < reseña.calificacion ? "currentColor" : "none"}
+                            className={`${i < reseña.calificacion ? "star-filled" : "star-empty"}`} />
+                    ))}
+                  </div>
+                  <span className="review-author">{reseña.autor}</span>
+                </div>
+              </div>
             ))}
-            <span className="ml-2 text-sm text-purple-700">5 / 5</span>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+      {/* Botón de Carrito */}
+      <div className="cart-button-container">
+        <Button 
+          disabled={carrito.length === 0}
+          className={`cart-button ${carrito.length > 0 ? 'cart-button-active' : 'cart-button-disabled'}`}
+        >
+          <ShoppingCart size={20} />
+          <span>
+            {carrito.length > 0 
+              ? `Contactar (${carrito.length})` 
+              : "Selecciona productos"}
+          </span>
+        </Button>
+      </div>
     </div>
   );
 };
