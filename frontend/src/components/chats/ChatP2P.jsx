@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Para navegación en React Router
 import { Send, MessageCircle } from "lucide-react";
+import back from "../../assets/atras.png"; // Importa la imagen de retroceso
+import "./ChatP2P.css";
+
 
 const Chat = () => {
   const [socket, setSocket] = useState(null);
@@ -9,6 +13,7 @@ const Chat = () => {
   const [userId, setUserId] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef(null);
+  const navigate = useNavigate();
 
   // Inicializar usuario y conectar WebSocket
   useEffect(() => {
@@ -140,84 +145,94 @@ const Chat = () => {
   };
 
   const formatTime = (date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
+    const localDate = new Date(date);
+    const adjustedDate = new Date(localDate.getTime() - (5 * 60 * 60 * 1000)); // Ajustar a UTC-5
+    return adjustedDate.toLocaleTimeString("es-EC", { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      hour12: false 
+    });
+  };  
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-blue-500 to-purple-600">
-      <div className="w-[390px] h-[800px] bg-white shadow-2xl rounded-[40px] overflow-hidden flex flex-col border border-gray-300 relative">
+    <div className="chat-container">
+      <div className="chat-window">
         {/* Encabezado */}
-        <div className="bg-blue-700 text-white p-4 text-center font-bold text-lg flex items-center justify-between rounded-t-[40px] shadow-md">
-          <div className="flex items-center">
-            <MessageCircle className="w-6 h-6 mr-2" /> Chat App
-          </div>
-          <div 
-            className="text-sm cursor-pointer hover:underline"
-            onClick={updateUsername}
-          >
-            {username} ✏️
-          </div>
+        <div className="chat-header">
+          {/* Botón de retroceso */}
+          <img 
+            src={back} 
+            alt="Atrás" 
+            className="back-button"
+            onClick={() => navigate("/negocio")}
+          />
+        <div className="chat-header-title">
+          <MessageCircle className="chat-header-icon" />
+          <span>Chat DeUna</span>
         </div>
+        <div className="chat-status">
+          <span className={`status-indicator ${isConnected ? "online" : "offline"}`}></span>
+          {isConnected ? "Conectado" : "Desconectado"}
+        </div>
+        <div className="chat-username" onClick={updateUsername}>
+          {username}
+        </div>
+      </div>
+
 
         {/* Indicador de conexión */}
         {!isConnected && (
-          <div className="bg-red-500 text-white p-1 text-center text-xs">
+          <div className="connection-status">
             Reconectando...
           </div>
         )}
 
         {/* Contenedor de mensajes */}
-        <div className="flex flex-col flex-1 overflow-y-auto p-4 space-y-3 bg-gray-100">
+        <div className="messages-container">
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`flex ${msg.user_id === userId ? "justify-end" : "justify-start"}`}
+              className={`message-wrapper ${msg.user_id === userId ? "message-own" : "message-other"}`}
             >
               <div
-                className={`rounded-xl px-4 py-2 max-w-[75%] text-sm shadow-md flex flex-col ${
-                  msg.user_id === userId
-                    ? "bg-blue-600 text-white self-end rounded-br-none"
-                    : "bg-gray-300 text-black rounded-bl-none"
+                className={`message-bubble ${
+                  msg.user_id === userId ? "message-bubble-own" : "message-bubble-other"
                 }`}
               >
-                <div className="flex justify-between w-full">
-                  <p className={`text-xs font-semibold ${msg.user_id === userId ? "text-blue-200" : "text-gray-600"}`}>
-                    {msg.user_id !== userId ? msg.sender : "Tú"}
-                  </p>
-                  {msg.timestamp && (
-                    <p className={`text-xs ml-2 ${msg.user_id === userId ? "text-blue-200" : "text-gray-600"}`}>
-                      {formatTime(msg.timestamp)}
-                    </p>
-                  )}
-                </div>
-                <p className="break-words mt-1">
+                <p className="message-text">
                   {msg.text}
                 </p>
               </div>
+              {/* Hora del mensaje fuera del contenedor */}
+              {msg.timestamp && (
+                <p className={`message-time-below ${msg.user_id === userId ? "message-time-own" : "message-time-other"}`}>
+                  {formatTime(msg.timestamp)}
+                </p>
+              )}
             </div>
           ))}
           <div ref={messagesEndRef}></div>
         </div>
 
         {/* Barra de envío */}
-        <div className="flex items-center p-3 bg-white border-t border-gray-300 space-x-2 rounded-b-[40px] shadow-md">
+        <div className="message-input-container">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="flex-1 p-3 bg-gray-200 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+            className={`message-input ${!isConnected ? "message-input-disabled" : ""}`}
             placeholder="Escribe un mensaje..."
             disabled={!isConnected}
           />
           <button
             onClick={sendMessage}
             disabled={!isConnected}
-            className={`p-3 text-white rounded-full transition flex items-center justify-center ${
-              isConnected ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400"
+            className={`send-button ${
+              isConnected ? "send-button-active" : "send-button-disabled"
             }`}
           >
-            <Send className="w-5 h-5" />
+            <Send className="send-button-icon" />
           </button>
         </div>
       </div>
