@@ -113,7 +113,7 @@ const InfoNegocios = () => {
                     
                     <div className="product-info">
                       <h3 className="product-title">{producto.title}</h3>
-                      <p className="product-price">${producto.price}</p>
+                      {/* <p className="product-price">${producto.price}</p> */}
                     </div>
                   </div>
                 );
