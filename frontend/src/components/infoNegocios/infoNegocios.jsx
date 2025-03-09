@@ -91,7 +91,7 @@ const InfoNegocios = () => {
           </div>
         </div>
         <div className="contratar-container">
-          <Button className="contratar-button">
+          <Button className="contratar-button" onClick={() => navigate("/chat")}>
             Contratar
           </Button>
         </div>
@@ -176,6 +176,7 @@ const InfoNegocios = () => {
         <Button 
           className={`cart-button ${carrito.length > 0 ? 'cart-button-active' : 'cart-button-disabled'}`}
           disabled={carrito.length === 0}
+          onClick={() => navigate("/chat")}
         >
           <ShoppingCart size={20} />
           <span>
