@@ -368,7 +368,7 @@
   position: absolute;
   bottom: 80px;
   left: 10px;
-  width: calc(100% - 20px);
+  width: calc(100% - 30px);
   max-height: 400px;
   background-color: white;
   border-radius: 12px;
@@ -393,6 +393,7 @@
 .payment-form-header {
   display: flex;
   align-items: center;
+  height: 25px;
   padding: 15px;
   background-color: #9c27b0;
   color: white;
@@ -413,7 +414,7 @@
 
 .payment-form {
   padding: 15px;
-  max-height: 350px;
+  height: 230px !important;
   overflow-y: auto;
 }
 
@@ -429,7 +430,7 @@
 }
 
 .form-group input {
-  width: 100%;
+  width: 300px;
   padding: 10px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
