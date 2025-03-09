@@ -436,7 +436,7 @@
   font-size: 14px;
 }
 
-.payment-button-in-message {
+.generate-payment-button {
   width: 100%;
   padding: 12px;
   background-color: #9c27b0;
@@ -448,7 +448,54 @@
   transition: background-color 0.3s;
 }
 
-.payment-button-in-message:hover  {
+.generate-payment-button:hover  {
   background-color: #6c1d7a;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para el contenedor de QR independiente */
+.qr-container-standalone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px 0;
+  max-width: 100%;
+}
+
+.qr-image-standalone {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+/* Ajustar alineación según el remitente */
+.message-own .qr-container-standalone {
+  align-self: flex-end;
+  align-items: flex-end;
+  margin-right: 15px;
+}
+
+.message-other .qr-container-standalone {
+  align-self: flex-start;
+  align-items: flex-start;
+  margin-left: 15px;
+}
+
+/* Mejorar el botón de pago */
+.payment-button-in-message {
+  margin-top: 8px;
+  padding: 8px 16px;
+  background-color: #9c27b0;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.payment-button-in-message:hover {
+  background-color: #6c1d7a;
 }

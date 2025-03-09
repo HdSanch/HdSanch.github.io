@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Send, MessageCircle, ShoppingCart, DollarSign } from "lucide-react";
 import back from "../../assets/atras.png";
+import axios from "axios";
 import "./ChatP2P.css";
 
 const Chat = () => {
@@ -21,6 +22,9 @@ const Chat = () => {
   });
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
+
+  // Configuración de las APIs
+  const API_REQUEST = "/api/merchant/v1/payment/request";
 
   // Inicializar usuario y conectar WebSocket
   useEffect(() => {
@@ -61,6 +65,34 @@ const Chat = () => {
       }
     };
   }, []);
+
+  // Verificar si hay confirmación de pago en la navegación
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const state = window.history.state?.state;
+      if (state && state.confirmPayment) {
+        const confirmMessage = `✅ Pago confirmado por $${state.amount || 'N/A'}\nID de Transferencia: ${state.transactionId || 'N/A'}`;
+        sendMessage(confirmMessage);
+      }
+    };
+
+    // Escuchar cambios en la ubicación
+    window.addEventListener('popstate', handleLocationChange);
+    
+    // Verificar al cargar
+    const state = window.history.state?.state;
+    if (state && state.confirmPayment) {
+      const confirmMessage = `✅ Pago confirmado por $${state.amount || 'N/A'}\nID de Transferencia: ${state.transactionId || 'N/A'}`;
+      // Pequeño timeout para asegurar que socket esté listo
+      setTimeout(() => {
+        sendMessage(confirmMessage);
+      }, 500);
+    }
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+    };
+  }, [socket, isConnected]);
 
   const connectWebSocket = (userId, username) => {
     const ws = new WebSocket(`ws://localhost:8000/ws/${userId}`);
@@ -106,7 +138,8 @@ const Chat = () => {
           imageType: msg.imageType || null,
           isPaymentRequest: msg.isPaymentRequest || false,
           paymentAmount: msg.paymentAmount || null,
-          transactionId: msg.transactionId || null
+          transactionId: msg.transactionId || null,
+          qrImage: msg.qrImage || null
         })));
       } else if (data.type === "message") {
         // Añadir nuevo mensaje
@@ -121,7 +154,8 @@ const Chat = () => {
             imageType: data.imageType || null,
             isPaymentRequest: data.isPaymentRequest || false,
             paymentAmount: data.paymentAmount || null,
-            transactionId: data.transactionId || null
+            transactionId: data.transactionId || null,
+            qrImage: data.qrImage || null
           }
         ]);
       }
@@ -136,7 +170,7 @@ const Chat = () => {
   }, [messages]);
 
   // Función para enviar mensajes
-  const sendMessage = (customMessage = null, imageData = null, imageType = null, isPaymentRequest = false) => {
+  const sendMessage = (customMessage = null, imageData = null, imageType = null, isPaymentRequest = false, qrImage = null) => {
     if (socket && isConnected) {
       const messageText = customMessage || input.trim();
       
@@ -145,24 +179,28 @@ const Chat = () => {
           text: messageText,
           timestamp: new Date().toISOString()
         };
+        socket.send(JSON.stringify(messageData));
+
         
         // Si hay datos de imagen, añadirlos al mensaje
-        if (imageData) {
-          messageData.imageData = imageData;
-          messageData.imageType = imageType;
-        }
+        // if (imageData) {
+        //   messageData.imageData = imageData;
+        //   messageData.imageType = imageType;
+        // }
         
-        // Si es una solicitud de pago, añadir la información
-        if (isPaymentRequest) {
-          messageData.isPaymentRequest = true;
-          messageData.paymentAmount = paymentData.amount;
-          messageData.transactionId = paymentData.internalTransactionReference;
-        }
+        // // Si es una solicitud de pago, añadir la información
+        // // if (isPaymentRequest) {
+        // //   messageData.isPaymentRequest = true;
+        // //   messageData.paymentAmount = paymentData.amount;
+        // //   messageData.transactionId = paymentData.internalTransactionReference;
+        // //   if (qrImage) {
+        // //     messageData.qrImage = qrImage;
+        // //   }
+        // // }
         
-        socket.send(JSON.stringify(messageData));
-        if (!customMessage) {
-          setInput("");
-        }
+        // if (!customMessage) {
+        //   setInput("");
+        // }
 
         // Si es una solicitud de pago, añadirla también localmente
         // Este paso es necesario porque el servidor actual podría no manejar los nuevos campos
@@ -176,11 +214,13 @@ const Chat = () => {
               timestamp: new Date(),
               isPaymentRequest: true,
               paymentAmount: paymentData.amount,
-              transactionId: paymentData.internalTransactionReference
+              transactionId: paymentData.internalTransactionReference,
+              qrImage: qrImage
             }
           ]);
         }
       }
+      
     }
   };
 
@@ -230,7 +270,7 @@ const Chat = () => {
     });
   };
 
-  // Simplificada: función para manejar los cambios en el formulario de pago
+  // Función para manejar los cambios en el formulario de pago
   const handlePaymentInputChange = (e) => {
     const { name, value } = e.target;
     setPaymentData({
@@ -244,30 +284,53 @@ const Chat = () => {
     return Math.random().toString(36).substring(2, 15).toUpperCase();
   };
 
-  // Función simplificada para procesar el pago
-  const processPayment = () => {
-    // Generar un nuevo ID de transacción único
-    const transactionId = generateTransactionId();
-    
-    // Actualizar el ID de transacción
-    setPaymentData(prev => ({
-      ...prev,
-      internalTransactionReference: transactionId
-    }));
-    
-    // Enviar mensaje con la información del pago
-    const paymentMessage = `Se ha generado una solicitud de pago por $${paymentData.amount.toFixed(2)} - ${paymentData.detail}\nID de Transferencia: ${transactionId}`;
-    
-    // Indica explícitamente que este es un mensaje de pago
-    sendMessage(paymentMessage, null, null, true);
-    
-    // Cerrar el formulario de pago
-    setShowPaymentForm(false);
+  // Función para generar QR y solicitud de pago
+  const processPayment = async () => {
+    try {
+      // Generar un nuevo ID de transacción único
+      const transactionId = generateTransactionId();
+      
+      // Actualizar el ID de transacción
+      const updatedPaymentData = {
+        ...paymentData,
+        internalTransactionReference: transactionId,
+        pointOfSale: "4121565",
+        qrType: "dynamic",
+        format: "2"
+      };
+      
+      setPaymentData(updatedPaymentData);
+      
+      // Hacer la solicitud para obtener el QR
+      const response = await axios.post(API_REQUEST, updatedPaymentData);
+      
+      // Verificar si la respuesta tiene un código QR
+      if (response.data && response.data.qr) {
+        const qrImage = response.data.qr;
+        
+        // Enviar mensaje con la información del pago
+        const paymentMessage = `Se ha generado una solicitud de pago por $${updatedPaymentData.amount.toFixed(2)} - ${updatedPaymentData.detail}\nID de Transferencia: ${transactionId}`;
+        
+        // Enviar el mensaje con el QR
+        sendMessage(paymentMessage, null, null, true, qrImage);
+      } else {
+        console.error("No se recibió código QR en la respuesta");
+        alert("Error al generar el código QR de pago");
+      }
+      
+      // Cerrar el formulario de pago
+      setShowPaymentForm(false);
+    } catch (error) {
+      console.error("Error al generar el QR de pago:", error);
+      alert("Error al generar el código QR de pago");
+    }
   };
 
-  // Función para redirigir al pagar
-  const goToPayment = () => {
-    navigate("/comprobante");
+  // Función para procesar pago inmediatamente (sin ir a comprobante)
+  const processPaymentDirectly = (transactionId, amount) => {
+    // Enviar mensaje de confirmación de pago
+    const confirmMessage = `✅ Pago realizado con éxito por $${amount || 'N/A'}\nID de Transferencia: ${transactionId || 'N/A'}`;
+    sendMessage(confirmMessage);
   };
 
   return (
@@ -372,69 +435,106 @@ const Chat = () => {
           </div>
         )}
 
-        {/* Contenedor de mensajes */}
-        <div className="messages-container">
-          {messages.map((msg, index) => {
-            // Verificar si es un mensaje de pago
-            const isPaymentMsg = msg.text && (
-              msg.isPaymentRequest === true || 
-              msg.text.includes("Se ha generado una solicitud de pago")
-            );
-            
-            return (
-              <div
-                key={index}
-                className={`message-wrapper ${msg.user_id === userId ? "message-own" : "message-other"}`}
-              >
-                <div
-                  className={`message-bubble ${
-                    msg.user_id === userId ? "message-bubble-own" : "message-bubble-other"
-                  } ${isPaymentMsg ? "payment-message" : ""}`}
-                >
-                  {/* Texto del mensaje */}
-                  <p className="message-text" style={{ whiteSpace: 'pre-line' }}>
-                    {msg.text}
-                  </p>
-                  
-                  {/* Imagen del mensaje (si existe) */}
-                  {msg.imageData && (
-                    <div className="message-image-container">
-                      <img 
-                        src={msg.imageData.startsWith('data:') 
-                          ? msg.imageData 
-                          : `data:${msg.imageType || 'image/png'};base64,${msg.imageData}`}
-                        alt="Imagen adjunta" 
-                        className="message-image"
-                        onError={(e) => {
-                          console.error("Error loading image:", e);
-                          e.target.src = "/placeholder-qr.png"; // Fallback image
-                          e.target.style.opacity = 0.5;
-                        }}
-                      />
-                    </div>
-                  )}
-                  
-                  {/* Botón de pago (si es una solicitud de pago) */}
-                  {isPaymentMsg && (
-                    <button 
-                      className="payment-button-in-message"
-                      onClick={goToPayment}
-                    >
-                      Pagar
-                    </button>
-                  )}
-                </div>
-                {/* Hora del mensaje fuera del contenedor */}
-                {msg.timestamp && (
-                  <p className={`message-time-below ${msg.user_id === userId ? "message-time-own" : "message-time-other"}`}>
-                    {formatTime(msg.timestamp)}
-                  </p>
-                )}
-              </div>
-            );
-          })}
-          <div ref={messagesEndRef}></div>
+       {/* Contenedor de mensajes */}
+<div className="messages-container">
+  {messages.map((msg, index) => {
+    // Verificar si es un mensaje de pago
+    const isPaymentMsg = msg.text && (
+      msg.isPaymentRequest === true || 
+      msg.text.includes("Se ha generado una solicitud de pago")
+    );
+    
+    // Extraer el transaction ID y el monto del mensaje de pago
+    let transactionId = null;
+    let paymentAmount = null;
+    
+    if (isPaymentMsg) {
+      // Intentar extraer ID de transacción del mensaje
+      const idMatch = msg.text.match(/ID de Transferencia: ([A-Z0-9]+)/);
+      if (idMatch && idMatch[1]) {
+        transactionId = idMatch[1];
+      } else if (msg.transactionId) {
+        transactionId = msg.transactionId;
+      }
+      
+      // Intentar extraer monto del mensaje
+      const amountMatch = msg.text.match(/\$([0-9.]+)/);
+      if (amountMatch && amountMatch[1]) {
+        paymentAmount = parseFloat(amountMatch[1]);
+      } else if (msg.paymentAmount) {
+        paymentAmount = msg.paymentAmount;
+      }
+    }
+    
+    return (
+      <div
+        key={index}
+        className={`message-wrapper ${msg.user_id === userId ? "message-own" : "message-other"}`}
+      >
+        <div
+          className={`message-bubble ${
+            msg.user_id === userId ? "message-bubble-own" : "message-bubble-other"
+          } ${isPaymentMsg ? "payment-message" : ""}`}
+        >
+          {/* Texto del mensaje */}
+          <p className="message-text" style={{ whiteSpace: 'pre-line' }}>
+            {msg.text}
+          </p>
+          
+          {/* Imagen del mensaje (si existe) */}
+          {msg.imageData && (
+            <div className="message-image-container">
+              <img 
+                src={msg.imageData.startsWith('data:') 
+                  ? msg.imageData 
+                  : `data:${msg.imageType || 'image/png'};base64,${msg.imageData}`}
+                alt="Imagen adjunta" 
+                className="message-image"
+                onError={(e) => {
+                  console.error("Error loading image:", e);
+                  e.target.src = "/placeholder-qr.png"; // Fallback image
+                  e.target.style.opacity = 0.5;
+                }}
+              />
+            </div>
+          )}
         </div>
+        
+        {/* QR de Pago (si existe) - Ahora fuera del bubble principal */}
+        {isPaymentMsg && msg.qrImage && !msg.text.includes("✅ Pago") && (
+          <div className="qr-container-standalone">
+            <img 
+              src={msg.qrImage}
+              alt="Código QR de pago" 
+              className="qr-image-standalone"
+              onError={(e) => {
+                console.error("Error loading QR image:", e);
+                e.target.src = "/placeholder-qr.png"; // Fallback image
+                e.target.style.opacity = 0.5;
+              }}
+            />
+            
+            {/* Botón de pago junto al QR */}
+            <button 
+              className="payment-button-in-message"
+              onClick={() => processPaymentDirectly(transactionId, paymentAmount)}
+            >
+              Pagar
+            </button>
+          </div>
+        )}
+        
+        {/* Hora del mensaje fuera del contenedor */}
+        {msg.timestamp && (
+          <p className={`message-time-below ${msg.user_id === userId ? "message-time-own" : "message-time-other"}`}>
+            {formatTime(msg.timestamp)}
+          </p>
+        )}
+      </div>
+    );
+  })}
+  <div ref={messagesEndRef}></div>
+</div>
 
         {/* Barra de envío */}
         <div className="message-input-container">
