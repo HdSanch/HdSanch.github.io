@@ -89,7 +89,7 @@ const Comprobante = () => {
 
     return (
         <div className="comprobante-container">
-            <div className="atras">
+            <div className="atras" style={display= "none"}>
                 {/* Botón de retroceso */}
                 <img 
                     src={back} 
