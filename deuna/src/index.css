@@ -3,9 +3,13 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Definimos la paleta de colores blanco y morado */
+  --primary-color: #6a0dad; /* Morado */
+  --secondary-color: #ffffff; /* Blanco */
+  --text-color: #4b0082; /* Morado oscuro */
+
+  color: var(--text-color);
+  background-color: var(--secondary-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,54 +19,87 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--primary-color);
   text-decoration: inherit;
 }
+
 a:hover {
-  color: #535bf2;
+  color: #4b0082;
 }
 
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 2em;
+  text-align: center;
+  color: var(--primary-color);
 }
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid var(--primary-color);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.25s, border-color 0.25s;
 }
+
 button:hover {
-  border-color: #646cff;
+  background-color: #4b0082;
+  border-color: #4b0082;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Forzar el tamaño del contenedor de la app al de un celular */
+#root {
+  width: 375px;
+  min-height: 714px;
+  height: 100%;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--secondary-color);
+}
+
+/* Tarjetas */
+.card {
+  background-color: #f5f0ff; /* Morado claro */
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos específicos para pantallas claras */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--text-color);
+    background-color: var(--secondary-color);
   }
   a:hover {
-    color: #747bff;
+    color: #4b0082;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--primary-color);
   }
 }
