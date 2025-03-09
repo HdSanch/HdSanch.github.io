@@ -153,5 +153,5 @@ Si tienes preguntas o sugerencias, no dudes en contactarnos a través de:
 ---
 
 <div align="center">
-  <p>Hecho con ❤️ por el equipo Push&Commit</p>
+  <p>Hecho por el equipo Push&Commit</p>
 </div>

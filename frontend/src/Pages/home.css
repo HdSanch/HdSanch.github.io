@@ -1,110 +1,354 @@
-/* src/pages/home.css */
+/* Estilos generales */
 .home-container {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    padding: 20px;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .header-icons .icon {
-    margin-left: 15px;
-    font-size: 20px;
-  }
-  
-  .saldo-card {
-    background: white;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  padding: 15px;
+  max-width: 430px; /* Para simular un tamaño de móvil */
+  margin: auto;
+  padding-bottom: 20px;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* Encabezado con el nombre del usuario */
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 45px;
+  height: 45px;
+  background-color: #d8c8ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Iconos de notificación y ayuda */
+.header-icons {
+  display: flex;
+}
+
+.header-icons .icon {
+  font-size: 22px;
+  margin-left: 15px;
+}
+
+/* Banner de transferencias */
+.banner-card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.banner-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.banner-subtitle {
+  font-size: 14px;
+  color: #666;
+}
+
+.banner-image img {
+  width: 60px;
+  height: 60px;
+}
+
+/* Tarjeta de saldo */
+.saldo-card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.saldo-label {
+  font-size: 16px;
+  color: gray;
+}
+
+.saldo-monto {
+  font-size: 26px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.icono-ojo {
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.saldo-arrow {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  color: #666;
+}
+
+/* Banner de pago sin internet */
+.banner-pago {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.banner-pago-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.banner-pago-image img {
+  width: 60px;
+  height: 60px;
+}
+
+/* Contenedor de botones */
+.quick-access {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  justify-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* Botones de acceso rápido */
+.button-card {
+  background: white;
+  padding: 5px;
+  border-radius: 20px;
+  box-shadow: 0px 7px 5px rgba(41, 41, 41, 0.1);
+  text-align: center;
+  width: 85px;
+  height: 85px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Aumentar el tamaño de la imagen */
+.button-image {
+  width: 45px;
+  height: 45px;
+  margin-bottom: 5px;
+}
+
+/* Texto debajo de la imagen */
+.button-card span {
+  font-size: 13px;
+}
+
+/* Banner de invitación */
+.invitation-banner {
+  background: #f0e6ff;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.invitation-text {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.invitation-action {
+  font-size: 14px;
+  color: #666;
+}
+
+.invitation-arrow {
+  position: absolute;
+  right: 15px;
+  font-size: 24px;
+  color: #666;
+}
+
+/* Título de promociones */
+.promos-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+/* Botones principales */
+.main-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.main-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  margin: 0 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.transferir {
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.pagar-qr {
+  background-color: #5f259f;
+  color: white;
+}
+
+.button-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+/* Barra de navegación inferior */
+.menu-navegacion {
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  padding: 12px 0 8px 0;
+  border-top: 1px solid #eee;
+  width: 100%;
+  max-width: 430px;
+  margin-top: 20px;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  text-decoration: none;
+  color: gray;
+  width: 25%;
+  text-align: center;
+}
+
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+  display: block;
+  margin: 0 auto 4px;
+}
+
+.menu-item.activo {
+  font-weight: bold;
+  color: #000000;
+}
+
+/* RESPONSIVE: Adaptado solo para móviles */
+@media (max-width: 768px) {
+  .home-container {
     padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
+    padding-bottom: 80px;
   }
-  
-  .saldo-monto {
-    display: flex;
-    align-items: center;
-    font-size: 22px;
-    font-weight: bold;
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
   }
-  
-  .icono-ojo {
-    margin-left: 10px;
-    font-size: 20px;
+
+  .user-name {
+    font-size: 16px;
   }
-  
-  .servicios p {
-    font-weight: bold;
-    margin-top: 15px;
-  }
-  
-  .servicios-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .servicio-item {
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    text-align: center;
-    flex: 1;
-  }
-  
-  .nuevo {
-    background-color: #d1f3e0;
-    position: relative;
-  }
-  
-  .invitacion {
-    background: #eee;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-    margin-top: 15px;
-  }
-  
-  .botones-principales {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-  }
-  
-  .btn-morado {
-    background: #6c47ff;
-    color: white;
-    padding: 12px;
-    border-radius: 8px;
-    flex: 1;
-    margin: 5px;
-    text-align: center;
-  }
-  
-  .menu-navegacion {
-    display: flex;
-    justify-content: space-around;
-    background: white;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
-  
-  .menu-item {
+
+  .header-icons .icon {
     font-size: 18px;
-    text-decoration: none;
-    color: gray;
   }
-  
-  .activo {
-    font-weight: bold;
-    color: #6c47ff;
+
+  .saldo-card {
+    padding: 12px;
   }
-  
+
+  .saldo-monto {
+    font-size: 22px;
+  }
+
+  .icono-ojo {
+    font-size: 18px;
+  }
+
+  /* Botones más grandes en móvil */
+  .button-card {
+    width: 75px;
+    height: 75px;
+  }
+
+  .button-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .button-card span {
+    font-size: 12px;
+  }
+
+  .main-button {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .menu-item {
+    font-size: 11px;
+  }
+
+  .menu-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
