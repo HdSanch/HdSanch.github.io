@@ -138,6 +138,7 @@
 }
 
 .product-item {
+  width: 350px !important;
   padding: 12px;
   border-radius: 8px;
   display: flex;
@@ -181,6 +182,7 @@
 
 .product-title {
   font-weight: 500;
+  font-size: 15px;
   color: #111827;
   white-space: nowrap;
   overflow: hidden;
