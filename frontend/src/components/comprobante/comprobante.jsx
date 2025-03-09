@@ -10,7 +10,7 @@ const Comprobante = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [qrImage, setQrImage] = useState(null); 
-      const navigate = useNavigate();
+    const navigate = useNavigate();
 
     // Configuración de las APIs usando el proxy de Vite
     const API_REQUEST = "/api/merchant/v1/payment/request";
