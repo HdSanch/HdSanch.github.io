@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import InfoNegocios from "./components/infoNegocios/InfoNegocios";
+import Comprobante from "./components/comprobante/comprobante";
 
 function App() {
   return (
@@ -9,6 +10,8 @@ function App() {
         <Routes>
           <Route path="/negocio" element={<InfoNegocios />} />
           <Route path="*" element={<Navigate to="/negocio" />} /> {/* Redirige a /negocio */}
+          <Route path="/comprobante" element={<InfoNegocios />} />
+          <Route path="*" element={<Navigate to="/comprobante" />} /> {/* Redirige a /negocio */}
         </Routes>
       </div>
     </Router>
