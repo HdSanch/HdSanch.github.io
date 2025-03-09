@@ -1,9 +1,9 @@
-/* Estilos generales */
+/* Estilos generales con mejoras estéticas */
 .home-container {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  padding: 15px;
-  max-width: 430px; /* Para simular un tamaño de móvil */
+  font-family: 'Montserrat', Arial, sans-serif; /* Cambio a fuente más moderna */
+  background-color: #f8f9fa; /* Fondo más suave */
+  padding: 20px 15px; /* Padding más consistente */
+  max-width: 430px;
   margin: auto;
   padding-bottom: 20px;
 }
@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #f8f9fa;
 }
 
 /* Encabezado con el nombre del usuario */
@@ -20,7 +20,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px; /* Más espacio */
 }
 
 .user-info {
@@ -29,21 +29,24 @@
 }
 
 .user-avatar {
-  width: 45px;
-  height: 45px;
-  background-color: #d8c8ff;
+  width: 48px; /* Ligeramente más grande */
+  height: 48px;
+  background-color: #7e57c2; /* Color más vibrante */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   font-size: 18px;
-  margin-right: 10px;
+  margin-right: 12px;
+  color: white; /* Texto en blanco para mejor contraste */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
 .user-name {
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600; /* Semibold en lugar de bold para un aspecto más moderno */
+  color: #212529; /* Color más oscuro para mejor legibilidad */
 }
 
 /* Iconos de notificación y ayuda */
@@ -53,174 +56,214 @@
 
 .header-icons .icon {
   font-size: 22px;
-  margin-left: 15px;
+  margin-left: 18px; /* Más espacio entre iconos */
+  color: #495057; /* Color más oscuro para los iconos */
 }
 
 /* Banner de transferencias */
 .banner-card {
   background: white;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 18px; /* Más padding */
+  border-radius: 16px; /* Bordes más redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Sombra más suave y amplia */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  transition: transform 0.2s; /* Animación sutil al hover */
+}
+
+.banner-card:hover {
+  transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
 }
 
 .banner-title {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 17px; /* Ligeramente más grande */
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #212529;
 }
 
 .banner-subtitle {
   font-size: 14px;
-  color: #666;
+  color: #6c757d; /* Gris más moderno */
+  line-height: 1.4; /* Mejor espaciado de línea */
 }
 
 .banner-image img {
-  width: 60px;
-  height: 60px;
+  width: 65px; /* Imágenes un poco más grandes */
+  height: 65px;
 }
 
 /* Tarjeta de saldo */
 .saldo-card {
   background: white;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px; /* Más padding para respiración */
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   text-align: left;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   position: relative;
+  transition: all 0.2s;
+}
+
+.saldo-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .saldo-label {
   font-size: 16px;
-  color: gray;
+  color: #6c757d;
+  margin-bottom: 4px; /* Espacio entre la etiqueta y el valor */
 }
 
 .saldo-monto {
-  font-size: 26px;
-  font-weight: bold;
+  font-size: 28px; /* Más grande para destacar */
+  font-weight: 600;
   display: flex;
   align-items: center;
+  color: #212529;
 }
 
 .icono-ojo {
-  margin-left: 10px;
+  margin-left: 12px;
   font-size: 20px;
+  cursor: pointer; /* Indica que es clickeable */
 }
 
 .saldo-arrow {
   position: absolute;
-  right: 15px;
+  right: 18px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 24px;
-  color: #666;
+  font-size: 26px;
+  color: #6c757d;
 }
 
 /* Banner de pago sin internet */
 .banner-pago {
   background: white;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.banner-pago:hover {
+  transform: translateY(-2px);
 }
 
 .banner-pago-title {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 17px;
+  font-weight: 600;
+  color: #212529;
 }
 
 .banner-pago-image img {
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
 }
 
 /* Contenedor de botones */
 .quick-access {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 14px; /* Más espacio entre los elementos */
   justify-items: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin-top: 15px;
+  margin-bottom: 25px;
 }
 
 /* Botones de acceso rápido */
 .button-card {
   background: white;
-  padding: 5px;
-  border-radius: 20px;
-  box-shadow: 0px 7px 5px rgba(41, 41, 41, 0.1);
+  padding: 10px;
+  border-radius: 22px; /* Más redondeado */
+  box-shadow: 0 8px 12px rgba(41, 41, 41, 0.08); /* Sombra más suave */
   text-align: center;
-  width: 85px;
-  height: 85px;
+  width: 90px; /* Ligeramente más anchos */
+  height: 90px; /* Ligeramente más altos */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s;
+  text-decoration: none; /* Eliminar subrayado de los enlaces */
+}
+
+.button-card:hover {
+  transform: translateY(-3px); /* Elevación al hover */
+  box-shadow: 0 10px 15px rgba(41, 41, 41, 0.1);
 }
 
 /* Aumentar el tamaño de la imagen */
 .button-image {
-  width: 45px;
-  height: 45px;
-  margin-bottom: 5px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
 }
 
 /* Texto debajo de la imagen */
 .button-card span {
   font-size: 13px;
+  color: #495057; /* Color más oscuro para mejor legibilidad */
+  font-weight: 500; /* Medium weight para mejor legibilidad */
 }
 
 /* Banner de invitación */
 .invitation-banner {
-  background: #f0e6ff;
-  padding: 15px;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #f0e6ff 0%, #e6f0ff 100%); /* Gradiente sutil */
+  padding: 18px;
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+}
+
+.invitation-banner:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
 }
 
 .invitation-text {
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 17px;
+  color: #212529;
 }
 
 .invitation-action {
-  font-size: 14px;
-  color: #666;
+  font-size: 15px;
+  color: #5f259f; /* Color que coincide con el botón principal */
+  font-weight: 500;
 }
 
 .invitation-arrow {
   position: absolute;
-  right: 15px;
-  font-size: 24px;
-  color: #666;
+  right: 18px;
+  font-size: 26px;
+  color: #6c757d;
 }
 
 /* Título de promociones */
 .promos-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 20px 0;
+  font-size: 20px; /* Más grande */
+  font-weight: 600;
+  margin: 25px 0;
+  color: #212529;
 }
 
 /* Botones principales */
 .main-buttons {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
 }
 
 .main-button {
@@ -228,30 +271,46 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px;
-  border-radius: 10px;
+  padding: 16px;
+  border-radius: 14px; /* Más redondeado */
   border: none;
-  margin: 0 5px;
+  margin: 0 6px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.main-button:hover {
+  transform: translateY(-2px);
 }
 
 .transferir {
   background-color: white;
   color: #333;
-  border: 1px solid #ddd;
+  border: 1px solid #e9ecef; /* Borde más sutil */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.transferir:hover {
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08);
 }
 
 .pagar-qr {
   background-color: #5f259f;
   color: white;
+  box-shadow: 0 4px 6px rgba(95, 37, 159, 0.2);
+}
+
+.pagar-qr:hover {
+  background-color: #51208a; /* Ligeramente más oscuro al hover */
+  box-shadow: 0 6px 10px rgba(95, 37, 159, 0.3);
 }
 
 .button-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
+  width: 22px;
+  height: 22px;
+  margin-right: 12px;
 }
 
 /* Barra de navegación inferior */
@@ -259,11 +318,12 @@
   display: flex;
   justify-content: space-around;
   background: white;
-  padding: 12px 0 8px 0;
-  border-top: 1px solid #eee;
+  padding: 14px 0 10px 0;
+  border-top: 1px solid #e9ecef; /* Borde más sutil */
   width: 100%;
   max-width: 430px;
   margin-top: 20px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); /* Sombra sutil */
 }
 
 .menu-item {
@@ -272,83 +332,163 @@
   align-items: center;
   font-size: 12px;
   text-decoration: none;
-  color: gray;
+  color: #6c757d;
   width: 25%;
   text-align: center;
+  transition: all 0.2s;
 }
 
 .menu-icon {
   width: 24px;
   height: 24px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   display: block;
-  margin: 0 auto 4px;
+  margin: 0 auto 6px;
 }
 
 .menu-item.activo {
-  font-weight: bold;
-  color: #000000;
+  font-weight: 600;
+  color: #5f259f; /* Color principal para el ítem activo */
 }
 
-/* RESPONSIVE: Adaptado solo para móviles */
+.menu-item:hover {
+  color: #5f259f;
+}
+
+/* RESPONSIVE: Adaptado específicamente para móviles */
 @media (max-width: 768px) {
   .home-container {
-    padding: 15px;
-    padding-bottom: 80px;
+    padding: 12px;
+    padding-bottom: 70px; /* Reducido para evitar scroll innecesario */
+    max-width: 100%; /* Asegurar que no se desborde */
   }
 
+  /* Ajustes de header */
   .user-avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 38px; /* Más pequeño */
+    height: 38px;
+    font-size: 15px;
   }
 
   .user-name {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .header-icons .icon {
-    font-size: 18px;
+    font-size: 16px;
+    margin-left: 12px; /* Menos espacio entre iconos */
   }
 
-  .saldo-card {
+  /* Ajuste de banners */
+  .banner-card, .banner-pago, .saldo-card {
     padding: 12px;
+    margin-bottom: 12px; /* Reducir espaciado vertical */
+  }
+  
+  .banner-title, .banner-pago-title {
+    font-size: 15px;
+  }
+  
+  .banner-subtitle {
+    font-size: 13px;
+  }
+  
+  .banner-image img, .banner-pago-image img {
+    width: 50px; /* Imágenes más pequeñas */
+    height: 50px;
   }
 
+  /* Ajustes de la tarjeta de saldo */
+  .saldo-label {
+    font-size: 14px;
+  }
+  
   .saldo-monto {
     font-size: 22px;
   }
-
+  
   .icono-ojo {
-    font-size: 18px;
+    font-size: 16px;
+  }
+  
+  .saldo-arrow {
+    font-size: 22px;
   }
 
-  /* Botones más grandes en móvil */
+  /* Ajustes grid de botones */
+  .quick-access {
+    gap: 8px; /* Menos espacio entre botones */
+    margin-top: 12px;
+    margin-bottom: 16px;
+  }
+
+  /* Botones de acceso rápido más pequeños */
   .button-card {
-    width: 75px;
-    height: 75px;
+    width: 70px; /* Más pequeños para caber en pantallas pequeñas */
+    height: 70px;
+    padding: 6px;
+    border-radius: 18px; /* Un poco menos redondeado */
   }
 
   .button-image {
-    width: 40px;
-    height: 40px;
+    width: 36px; /* Imágenes más pequeñas */
+    height: 36px;
+    margin-bottom: 4px;
   }
 
   .button-card span {
-    font-size: 12px;
+    font-size: 11px; /* Texto más pequeño */
   }
 
-  .main-button {
+  /* Ajustes banner invitación */
+  .invitation-banner {
     padding: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .invitation-text {
+    font-size: 15px;
+  }
+  
+  .invitation-action {
+    font-size: 13px;
+  }
+
+  /* Título de promociones */
+  .promos-title {
+    font-size: 17px;
+    margin: 16px 0;
+  }
+
+  /* Botones principales */
+  .main-buttons {
+    margin-bottom: 25px;
+  }
+  
+  .main-button {
+    padding: 12px 8px; /* Menos padding horizontal */
     font-size: 14px;
+    border-radius: 12px;
+  }
+  
+  .button-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
   }
 
+  /* Barra de navegación */
+  .menu-navegacion {
+    padding: 10px 0 8px 0;
+  }
+  
   .menu-item {
-    font-size: 11px;
+    font-size: 10px; /* Texto más pequeño */
   }
-
+  
   .menu-icon {
     width: 20px;
     height: 20px;
+    margin-bottom: 4px;
   }
 }
