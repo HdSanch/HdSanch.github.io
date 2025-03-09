@@ -1,18 +1,21 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
       "/api": {
-        target: "https://apis-merchant.qa.deunalab.com",
+        target: process.env.VITE_API_URL,
         changeOrigin: true,
         secure: false,
         configure: (proxy) => {
           proxy.on("proxyReq", (proxyReq) => {
-            proxyReq.setHeader("x-api-secret", "70aa3a0caa6341f88b67ebb167ef7a50");
-            proxyReq.setHeader("x-api-key", "9fd4ac9c11b6455fa7270dba42a135ff");
+            proxyReq.setHeader("x-api-secret", process.env.VITE_API_SECRET);
+            proxyReq.setHeader("x-api-key", process.env.VITE_API_KEY);
           });
         },
         rewrite: (path) => path.replace(/^\/api/, ""),
