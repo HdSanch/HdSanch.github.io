@@ -1,82 +1,138 @@
-/* src/pages/servicios.css */
+/* src/pages/servicios.css - Versión compacta para móvil */
 .deuna-emprende-container {
-  font-family: Arial, sans-serif;
-  padding: 15px;
-  background-color: #f9f9f9;
-  max-width: 430px; /* Ajustado para pantalla de móvil estándar */
+  font-family: 'Montserrat', Arial, sans-serif;
+  padding: 10px;
+  background-color: #f8f9fa;
+  max-width: 100%;
   margin: 0 auto;
   min-height: 100vh;
   position: relative;
+  overflow-x: hidden; /* Prevenir scroll horizontal */
+}
+
+/* Botón de inicio - flecha tipo chevron */
+.home-button {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  width: 30px;
+  height: 30px;
+  text-decoration: none;
+  color: #000;
+  font-size: 22px;
+  font-weight: normal;
+  z-index: 10;
+  border: none;
+  padding: 0;
+}
+
+/* Ajustar para pantallas muy pequeñas */
+@media (max-width: 320px) {
+  .home-button {
+    top: 12px;
+    left: 8px;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
 }
 
 /* Header con botón de regreso */
 .header {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  padding-top: 8px;
+}
+
+.homepage-header {
+  margin-bottom: 15px;
   padding-top: 10px;
 }
 
-.back-button {
+.homepage-header h1 {
   font-size: 22px;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  color: #212529;
+}
+
+.homepage-header p {
+  font-size: 14px;
+  margin: 0;
+  color: #495057;
+  line-height: 1.4;
+  max-width: 100%;
+}
+
+.back-button {
+  font-size: 20px;
   text-decoration: none;
-  color: #000;
-  margin-right: 15px;
+  background: none;
+  border: none;
+  color: #212529;
+  margin-right: 10px;
   line-height: 1;
-  padding: 5px;
+  padding: 4px;
+  cursor: pointer;
 }
 
 .header-content h1 {
-  font-size: 22px;
-  margin: 0 0 10px 0;
-  font-weight: bold;
-  color: #333;
+  font-size: 20px;
+  margin: 0 0 6px 0;
+  font-weight: 600;
+  color: #212529;
 }
 
 .header-content p {
-  font-size: 14px;
+  font-size: 13px;
   margin: 0;
-  color: #555;
+  color: #495057;
   line-height: 1.4;
-  max-width: 280px;
+  max-width: 240px;
 }
 
 /* Barra de búsqueda */
 .search-bar {
   position: relative;
-  margin: 15px 0;
+  margin: 12px 0;
   display: flex;
   align-items: center;
   background-color: #fff;
-  border-radius: 25px;
-  padding: 0 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-  height: 45px;
+  border-radius: 20px;
+  padding: 0 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  height: 40px;
 }
 
 .search-icon {
-  margin-right: 10px;
-  color: #666;
-  font-size: 16px;
+  margin-right: 8px;
+  color: #6c757d;
+  font-size: 15px;
 }
 
 .search-bar input {
   flex: 1;
   border: none;
   outline: none;
-  font-size: 15px;
-  padding: 10px 0;
+  font-size: 14px;
+  padding: 8px 0;
   background: transparent;
+  font-family: 'Montserrat', Arial, sans-serif;
 }
 
 .clear-button {
-  background: #eee;
+  background: #e9ecef;
   border: none;
-  color: #888;
-  font-size: 14px;
+  color: #6c757d;
+  font-size: 12px;
   cursor: pointer;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,82 +144,231 @@
   background: none;
   border: none;
   margin-left: 5px;
-  font-size: 18px;
+  font-size: 16px;
+  color: #495057;
   cursor: pointer;
-  padding: 5px;
+  padding: 4px;
+}
+
+/* Sección Título */
+.seccion-titulo {
+  display: flex;
+  align-items: center;
+  margin: 18px 0 12px;
+}
+
+.seccion-titulo h2 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 600;
+  color: #212529;
+}
+
+.icon-tendencias, .icon-destacados, .icon-info {
+  font-size: 18px;
+  margin-right: 8px;
+  color: #5f259f;
+}
+
+/* Categorías Populares */
+.categorias-populares {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.categoria-popular {
+  background-color: #f1f3f5;
+  border: none;
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #495057;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Destacados */
+.destacados-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Reducido a 4 columnas */
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scrollbar-width: none;
+}
+
+.destacados-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.destacado-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #495057;
+  min-width: 65px;
+}
+
+.destacado-imagen-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 6px;
+  background-color: #e9ecef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.destacado-imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.destacado-nombre {
+  font-size: 11px;
+  text-align: center;
+  margin: 0;
+  max-width: 65px;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+/* Sabías que */
+.sabias-que-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  padding: 12px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sabias-que-content {
+  flex: 1;
+  padding-right: 10px;
+}
+
+.educacion-tag {
+  display: inline-block;
+  background-color: #00cca0;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.sabias-que-content h3 {
+  font-size: 14px;
+  margin: 0 0 8px 0;
+  color: #212529;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.sabias-que-content p {
+  font-size: 12px;
+  color: #495057;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.sabias-que-imagen {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sabias-que-imagen img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
 }
 
 /* Categorías / Tabs */
 .categorias-tabs {
   display: flex;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 15px;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 12px;
   overflow-x: auto;
-  scrollbar-width: none; /* Para Firefox */
+  scrollbar-width: none;
   padding-bottom: 2px;
 }
 
 .categorias-tabs::-webkit-scrollbar {
-  display: none; /* Para Chrome y Safari */
+  display: none;
 }
 
 .categoria-tab {
-  padding: 10px 15px;
+  padding: 8px 12px;
   background: none;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
-  color: #666;
+  color: #6c757d;
   position: relative;
   white-space: nowrap;
   flex: 1;
-  min-width: 100px;
+  min-width: 90px;
   text-align: center;
 }
 
 .categoria-tab.activo {
-  color: #333;
-  font-weight: bold;
+  color: #212529;
+  font-weight: 600;
 }
 
 .categoria-tab.activo::after {
   content: '';
   position: absolute;
-  bottom: -3px;
+  bottom: -2px;
   left: 0;
   width: 100%;
-  height: 3px;
+  height: 2px;
   background-color: #5f259f;
-  border-radius: 2px 2px 0 0;
+  border-radius: 1px 1px 0 0;
 }
 
 /* Lista de profesionales */
 .profesionales-lista {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .profesional-card {
   background: #fff;
-  border-radius: 8px;
-  padding: 12px;
+  border-radius: 10px;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .profesional-info {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
   flex: 1;
 }
 
 .profesional-imagen {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -172,17 +377,19 @@
 .profesional-detalles {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   flex: 1;
-  max-width: 65%;
+  max-width: 60%;
 }
 
 .profesional-detalles h3 {
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 600;
+  color: #212529;
 }
 
 .etiquetas {
@@ -193,22 +400,25 @@
 }
 
 .etiqueta {
-  background-color: #f0f0f0;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  color: #666;
+  background-color: #f1f3f5;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  color: #495057;
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .puntuacion {
   display: flex;
   align-items: center;
-  font-size: 13px;
+  font-size: 12px;
+  color: #495057;
+  font-weight: 500;
 }
 
 .estrella {
-  color: #FFD700;
+  color: #FFCD4A;
   margin-right: 3px;
 }
 
@@ -216,59 +426,101 @@
   background-color: #fff;
   color: #5f259f;
   border: 1px solid #5f259f;
-  border-radius: 20px;
-  padding: 6px 12px;
-  font-size: 13px;
+  border-radius: 16px;
+  padding: 5px 10px;
+  font-size: 12px;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
   white-space: nowrap;
   text-align: center;
-  min-width: 75px;
+  min-width: 70px;
+}
+
+.no-resultados {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+  font-weight: 500;
 }
 
 /* Para pantallas muy pequeñas */
-@media (max-width: 360px) {
+@media (max-width: 320px) {
   .deuna-emprende-container {
-    padding: 10px;
+    padding: 8px;
+  }
+  
+  .homepage-header h1 {
+    font-size: 20px;
+  }
+  
+  .homepage-header p {
+    font-size: 12px;
   }
   
   .header-content h1 {
-    font-size: 20px;
+    font-size: 18px;
   }
   
   .header-content p {
     font-size: 12px;
-    max-width: 220px;
+    max-width: 200px;
   }
   
   .back-button {
-    font-size: 20px;
-    margin-right: 12px;
+    font-size: 18px;
+    margin-right: 8px;
+  }
+  
+  .search-bar {
+    height: 36px;
+    padding: 0 10px;
   }
   
   .categoria-tab {
-    padding: 8px 12px;
-    min-width: 90px;
-    font-size: 13px;
+    padding: 6px 10px;
+    min-width: 80px;
+    font-size: 12px;
   }
   
   .profesional-imagen {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
   }
   
   .profesional-detalles h3 {
-    font-size: 14px;
+    font-size: 13px;
   }
   
   .etiqueta {
-    padding: 2px 6px;
-    font-size: 10px;
+    padding: 2px 5px;
+    font-size: 9px;
   }
   
   .ver-perfil-btn {
-    min-width: 70px;
-    padding: 5px 10px;
-    font-size: 12px;
+    min-width: 65px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .destacado-imagen-container {
+    width: 46px;
+    height: 46px;
+  }
+  
+  .destacado-nombre {
+    font-size: 10px;
+  }
+  
+  .sabias-que-card {
+    padding: 10px;
+  }
+  
+  .sabias-que-content {
+    padding-right: 8px;
+  }
+  
+  .sabias-que-imagen {
+    width: 80px;
+    height: 80px;
   }
 }

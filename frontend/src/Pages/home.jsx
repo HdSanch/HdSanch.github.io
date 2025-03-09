@@ -27,10 +27,10 @@ const Home = () => {
     { id: 1, nombre: "Transferir", imagen: transferImage },
     { id: 2, nombre: "Recargar", imagen: recargarImage },
     { id: 3, nombre: "Cobrar", imagen: cobrarImage },
-    { id: 4, nombre: "Metro de Quito", imagen: metroImage },
-    { id: 5, nombre: "Invita y Gana", imagen: invitaImage },
-    { id: 6, nombre: "Deuna Jóvenes", imagen: jovenesImage },
-    { id: 7, nombre: "Verificar pago", imagen: verificarImage },
+    { id: 4, nombre: "Metro", imagen: metroImage },
+    { id: 5, nombre: "Invita", imagen: invitaImage },
+    { id: 6, nombre: "Deuna Joven", imagen: jovenesImage },
+    { id: 7, nombre: "Verificar", imagen: verificarImage },
     { id: 8, nombre: "Servicios", imagen: serviciosImage } // Añadiendo el nuevo botón
   ];
 
@@ -41,7 +41,7 @@ const Home = () => {
       <div className="user-header">
         <div className="user-info">
           <div className="user-avatar">G</div>
-          <span className="user-name">Hola Gaby 👋</span>
+          <span className="user-name">¡Hola Gaby! 👋</span>
         </div>
         <div className="header-icons">
           <span className="icon">🔔</span>
@@ -52,8 +52,8 @@ const Home = () => {
       {/* Banner de transferencias */}
       <div className="banner-card">
         <div className="banner-text">
-          <div className="banner-title">Rápido y sin complicaciones</div>
-          <div className="banner-subtitle">Transfiere a otros bancos al instante</div>
+          <div className="banner-title">Transfiere sin complicaciones</div>
+          <div className="banner-subtitle">Envía dinero a cualquier banco al instante</div>
         </div>
         <div className="banner-image">
           <img src={bancoImage} alt="Banco" />
@@ -62,7 +62,7 @@ const Home = () => {
 
       {/* Tarjeta de saldo */}
       <div className="saldo-card">
-        <div className="saldo-label">Saldo disponible</div>
+        <div className="saldo-label">Tu saldo disponible</div>
         <div className="saldo-monto">$0,00 <span className="icono-ojo">👁</span></div>
         <div className="saldo-arrow">›</div>
       </div>
@@ -70,7 +70,7 @@ const Home = () => {
       {/* Banner de pago sin internet */}
       <div className="banner-pago">
         <div className="banner-pago-text">
-          <div className="banner-pago-title">Conoce cómo pagar sin internet</div>
+          <div className="banner-pago-title">Descubre cómo pagar sin conexión</div>
         </div>
         <div className="banner-pago-image">
           <img src={poderImage} alt="Pago sin internet" />
@@ -97,13 +97,13 @@ const Home = () => {
 
       {/* Banner de invitación */}
       <div className="invitation-banner">
-        <div className="invitation-text">¿Un amigo te invitó?</div>
-        <div className="invitation-action">Pega tu código</div>
-        <div className="invitation-arrow">›</div>
+        <div className="invitation-text">¿Te invitaron a Deuna?</div>
+        <div className="invitation-action">Ingresa tu código</div>
+
       </div>
 
       {/* Texto "Mis promociones" */}
-      <div className="promos-title">Mis promociones</div>
+      <div className="promos-title">Ofertas exclusivas</div>
 
       {/* Botones principales */}
       <div className="main-buttons">
@@ -113,7 +113,7 @@ const Home = () => {
         </button>
         <button className="main-button pagar-qr">
           <img src={pagarQRIcon} alt="Pagar a QR" className="button-icon" />
-          <span>Pagar a QR</span>
+          <span>Pagar QR</span>
         </button>
       </div>
 
