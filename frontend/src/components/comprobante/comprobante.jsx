@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./comprobante.css";
 
 const Comprobante = () => {
     const [transactionId, setTransactionId] = useState(null);
@@ -7,9 +8,9 @@ const Comprobante = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Configuración de las APIs
-    const API_REQUEST = "https://apis-merchant.qa.deunalab.com/merchant/v1/payment/request";
-    const API_INFO = "https://apis-merchant.qa.deunalab.com/merchant/v1/payment/info";
+    // Configuración de las APIs usando el proxy de Vite
+    const API_REQUEST = "/api/merchant/v1/payment/request";
+    const API_INFO = "/api/merchant/v1/payment/info";
 
     // Datos para la solicitud de pago
     const requestData = {
@@ -31,7 +32,7 @@ const Comprobante = () => {
                 throw new Error("No se recibió transactionId");
             }
         } catch (err) {
-            setError(err.message);
+            setError(`Error al obtener transactionId: ${err.response?.data?.message || err.message}`);
             setLoading(false);
         }
     };
@@ -39,13 +40,10 @@ const Comprobante = () => {
     // Función para obtener la información del pago
     const fetchPaymentInfo = async (id) => {
         try {
-            const response = await axios.post(API_INFO, {
-                idTransacionReference: id,
-                idType: "0",
-            });
+            const response = await axios.post(API_INFO, { idTransacionReference: id, idType: "0" });
             setPaymentInfo(response.data);
         } catch (err) {
-            setError(err.message);
+            setError(`Error al obtener información del pago: ${err.response?.data?.message || err.message}`);
         } finally {
             setLoading(false);
         }
@@ -64,23 +62,69 @@ const Comprobante = () => {
         }
     }, [transactionId]);
 
-    if (loading) return <p>Cargando...</p>;
-    if (error) return <p>Error: {error}</p>;
+    if (loading) return (
+        <div className="comprobante-container">
+            <div className="loading-container">
+                <div className="loading-indicator"></div>
+                <div className="loading-text">Cargando...</div>
+            </div>
+        </div>
+    );
+
+    if (error) return (
+        <div className="comprobante-container">
+            <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <p>Error: {error}</p>
+            </div>
+        </div>
+    );
 
     return (
-        <div>
-            <h2>Comprobante de Pago</h2>
-            {transactionId && <p><strong>Transaction ID:</strong> {transactionId}</p>}
+        <div className="comprobante-container">
+            <div className="comprobante-header">
+                <h2 className="comprobante-title">Comprobante de Pago</h2>
+                {transactionId && (
+                    <div className="transaction-id">
+                        <span className="transaction-label">Transaction ID:</span>
+                        <span className="transaction-value">{transactionId}</span>
+                    </div>
+                )}
+            </div>
+            
             {paymentInfo ? (
-                <div>
-                    <p><strong>Estado:</strong> {paymentInfo.status}</p>
-                    <p><strong>Monto:</strong> {paymentInfo.amount} {paymentInfo.currency}</p>
-                    <p><strong>Fecha:</strong> {paymentInfo.date || "N/A"}</p>
-                    <p><strong>Descripción:</strong> {paymentInfo.description || "Sin descripción"}</p>
-                    <p><strong>Ordenante:</strong> {paymentInfo.ordererName || "Desconocido"}</p>
+                <div className="payment-details">
+                    <div className="payment-status">
+                        <div className="status-indicator"></div>
+                        <span className="status-text">{paymentInfo.status}</span>
+                    </div>
+                    
+                    <div className="payment-info-grid">
+                        <div className="payment-info-item">
+                            <span className="payment-info-label">Monto:</span>
+                            <span className="payment-info-value">{paymentInfo.amount} {paymentInfo.currency}</span>
+                        </div>
+                        
+                        <div className="payment-info-item">
+                            <span className="payment-info-label">Fecha:</span>
+                            <span className="payment-info-value">{paymentInfo.date || "N/A"}</span>
+                        </div>
+                        
+                        <div className="payment-info-item">
+                            <span className="payment-info-label">Descripción:</span>
+                            <span className="payment-info-value">{paymentInfo.description || "Sin descripción"}</span>
+                        </div>
+                        
+                        <div className="payment-info-item">
+                            <span className="payment-info-label">Ordenante:</span>
+                            <span className="payment-info-value">{paymentInfo.ordererName || "Desconocido"}</span>
+                        </div>
+                    </div>
                 </div>
             ) : (
-                <p>No se encontró información de pago.</p>
+                <div className="no-payment-info">
+                    <p>No se encontró información de pago.</p>
+                </div>
             )}
         </div>
     );
