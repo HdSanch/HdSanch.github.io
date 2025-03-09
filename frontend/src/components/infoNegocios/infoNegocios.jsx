@@ -1,3 +1,4 @@
+// Modified InfoNegocios.jsx - Changes to pass selected products to Chat
 import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Star, Mail, Phone, ShoppingCart, ChevronDown, ChevronUp, Check, ChevronLeft } from "lucide-react";
@@ -49,6 +50,13 @@ const InfoNegocios = () => {
     { texto: "El diseño es bueno, pero la comunicación y los tiempos de respuesta fueron lentos. Con más organización, la experiencia habría sido mejor.", calificacion: 7.8, autor: "María Buitrón", maxCalificacion: 10 }
   ];
 
+  // Función para ir al chat con los productos seleccionados
+  const goToChat = () => {
+    // Guardar productos seleccionados en localStorage
+    localStorage.setItem("selected_products", JSON.stringify(carrito));
+    navigate("/chat");
+  };
+
   return (
     <div className="negocio-container">
       {/* Botón Regresar */}
@@ -91,7 +99,7 @@ const InfoNegocios = () => {
           </div>
         </div>
         <div className="contratar-container">
-          <Button className="contratar-button" onClick={() => navigate("/chat")}>
+          <Button className="contratar-button" onClick={goToChat}>
             Contratar
           </Button>
         </div>
@@ -176,7 +184,7 @@ const InfoNegocios = () => {
         <Button 
           className={`cart-button ${carrito.length > 0 ? 'cart-button-active' : 'cart-button-disabled'}`}
           disabled={carrito.length === 0}
-          onClick={() => navigate("/chat")}
+          onClick={goToChat}
         >
           <ShoppingCart size={20} />
           <span>

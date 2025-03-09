@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // Para navegación en React Router
-import { Send, MessageCircle } from "lucide-react";
-import back from "../../assets/atras.png"; // Importa la imagen de retroceso
+import { useNavigate } from "react-router-dom";
+import { Send, MessageCircle, ShoppingCart } from "lucide-react";
+import back from "../../assets/atras.png";
 import "./ChatP2P.css";
-
-
 const Chat = () => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -12,6 +10,8 @@ const Chat = () => {
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
   const [isConnected, setIsConnected] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [showProductsList, setShowProductsList] = useState(false);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
@@ -40,6 +40,13 @@ const Chat = () => {
     
     // Conectar al WebSocket con el ID de usuario
     connectWebSocket(currentUserId, currentUsername);
+    
+    // Cargar productos seleccionados desde localStorage
+    const productsData = localStorage.getItem("selected_products");
+    if (productsData) {
+      setSelectedProducts(JSON.parse(productsData));
+      setShowProductsList(true);
+    }
     
     return () => {
       if (socket) {
@@ -111,17 +118,39 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = () => {
-    if (socket && input.trim() !== "" && isConnected) {
-      const messageData = {
-        text: input,
-        timestamp: new Date().toISOString()
-      };
+  const sendMessage = (customMessage = null) => {
+    if (socket && isConnected) {
+      const messageText = customMessage || input.trim();
       
-      socket.send(JSON.stringify(messageData));
-      setInput("");
+      if (messageText !== "") {
+        const messageData = {
+          text: messageText,
+          timestamp: new Date().toISOString()
+        };
+        
+        socket.send(JSON.stringify(messageData));
+        if (!customMessage) {
+          setInput("");
+        }
+      }
     }
   };
+
+  // Función para enviar productos seleccionados como mensaje
+  const sendSelectedProducts = () => {
+    if (selectedProducts.length > 0 && socket && isConnected) {
+      const productsList = selectedProducts.map(product => `• ${product.title}`).join("\n");
+  
+      const messageText = `Hola, estoy interesado en los siguientes productos:\n${productsList}`;
+      sendMessage(messageText);
+  
+      // Limpiar productos del localStorage después de enviarlos
+      localStorage.removeItem("selected_products");
+      setSelectedProducts([]);
+      setShowProductsList(false);
+    }
+  };
+  
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -152,7 +181,7 @@ const Chat = () => {
       minute: '2-digit', 
       hour12: false 
     });
-  };  
+  };
 
   return (
     <div className="chat-container">
@@ -166,24 +195,47 @@ const Chat = () => {
             className="back-button"
             onClick={() => navigate("/negocio")}
           />
-        <div className="chat-header-title">
-          <MessageCircle className="chat-header-icon" />
-          <span>Chat DeUna</span>
+          <div className="chat-header-title">
+            <MessageCircle className="chat-header-icon" />
+            <span>Chat DeUna</span>
+          </div>
+          <div className="chat-status">
+            <span className={`status-indicator ${isConnected ? "online" : "offline"}`}></span>
+            {isConnected ? "Conectado" : "Desconectado"}
+          </div>
+          <div className="chat-username" onClick={updateUsername}>
+            {username}
+          </div>
         </div>
-        <div className="chat-status">
-          <span className={`status-indicator ${isConnected ? "online" : "offline"}`}></span>
-          {isConnected ? "Conectado" : "Desconectado"}
-        </div>
-        <div className="chat-username" onClick={updateUsername}>
-          {username}
-        </div>
-      </div>
-
 
         {/* Indicador de conexión */}
         {!isConnected && (
           <div className="connection-status">
             Reconectando...
+          </div>
+        )}
+
+        {/* Productos seleccionados */}
+        {showProductsList && selectedProducts.length > 0 && (
+          <div className="selected-products-container">
+            <div className="selected-products-header">
+              <ShoppingCart className="selected-products-icon" />
+              <span>Productos Seleccionados ({selectedProducts.length})</span>
+            </div>
+            <div className="selected-products-list">
+              {selectedProducts.map((product) => (
+                <div key={product.id} className="selected-product-item">
+                  <img src={product.image} alt={product.title} className="selected-product-image" />
+                  <span className="selected-product-title">{product.title}</span>
+                </div>
+              ))}
+            </div>
+            <button 
+              className="send-products-button"
+              onClick={sendSelectedProducts}
+            >
+              Enviar productos
+            </button>
           </div>
         )}
 
@@ -199,7 +251,7 @@ const Chat = () => {
                   msg.user_id === userId ? "message-bubble-own" : "message-bubble-other"
                 }`}
               >
-                <p className="message-text">
+                <p className="message-text" style={{ whiteSpace: 'pre-line' }}>
                   {msg.text}
                 </p>
               </div>
@@ -226,7 +278,7 @@ const Chat = () => {
             disabled={!isConnected}
           />
           <button
-            onClick={sendMessage}
+            onClick={() => sendMessage()}
             disabled={!isConnected}
             className={`send-button ${
               isConnected ? "send-button-active" : "send-button-disabled"
