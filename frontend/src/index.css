@@ -17,6 +17,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#root{
+  padding: 0px 10px;
+}
+
 a {
   font-weight: 500;
   color: var(--primary-color);
