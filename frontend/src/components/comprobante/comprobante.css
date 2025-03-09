@@ -13,6 +13,25 @@
     flex-direction: column;
 }
 
+/* QR Code Container */
+.qr-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    padding: 12px;
+    background-color: #f3e8ff;
+    border-radius: 8px;
+}
+
+.qr-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
 /* Header section */
 .comprobante-header {
     margin-bottom: 24px;

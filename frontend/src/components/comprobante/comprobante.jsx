@@ -7,6 +7,7 @@ const Comprobante = () => {
     const [paymentInfo, setPaymentInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [qrImage, setQrImage] = useState(null); 
 
     // Configuración de las APIs usando el proxy de Vite
     const API_REQUEST = "/api/merchant/v1/payment/request";
@@ -16,7 +17,7 @@ const Comprobante = () => {
     const requestData = {
         pointOfSale: "4121565",
         qrType: "dynamic",
-        amount: 5.19,
+        amount: 500,
         detail: "test postman GEO",
         internalTransactionReference: "IXWAHROMYSCEZWQ",
         format: "2",
@@ -28,6 +29,9 @@ const Comprobante = () => {
             const response = await axios.post(API_REQUEST, requestData);
             if (response.data && response.data.transactionId) {
                 setTransactionId(response.data.transactionId);
+                if(response.data.qr){
+                    setQrImage(response.data.qr);
+                }
             } else {
                 throw new Error("No se recibió transactionId");
             }
@@ -91,6 +95,13 @@ const Comprobante = () => {
                     </div>
                 )}
             </div>
+
+             {/* Renderizar la imagen QR */}
+             {qrImage && (
+                <div className="qr-container">
+                    <img src={qrImage} alt="Código QR" className="qr-image" />
+                </div>
+            )}
             
             {paymentInfo ? (
                 <div className="payment-details">
