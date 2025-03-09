@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Send, MessageCircle, ShoppingCart } from "lucide-react";
+import { Send, MessageCircle, ShoppingCart, DollarSign } from "lucide-react";
 import back from "../../assets/atras.png";
 import "./ChatP2P.css";
+
 const Chat = () => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -12,6 +13,12 @@ const Chat = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [showProductsList, setShowProductsList] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [paymentData, setPaymentData] = useState({
+    amount: 5.19,
+    detail: "test postman GEO",
+    internalTransactionReference: "IXWAHROMYSCEZWQ"
+  });
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
@@ -94,7 +101,12 @@ const Chat = () => {
           text: msg.text,
           sender: msg.sender,
           user_id: msg.user_id,
-          timestamp: new Date(msg.timestamp)
+          timestamp: new Date(msg.timestamp),
+          imageData: msg.imageData || null,
+          imageType: msg.imageType || null,
+          isPaymentRequest: msg.isPaymentRequest || false,
+          paymentAmount: msg.paymentAmount || null,
+          transactionId: msg.transactionId || null
         })));
       } else if (data.type === "message") {
         // Añadir nuevo mensaje
@@ -104,7 +116,12 @@ const Chat = () => {
             text: data.text,
             sender: data.sender,
             user_id: data.user_id,
-            timestamp: new Date(data.timestamp)
+            timestamp: new Date(data.timestamp),
+            imageData: data.imageData || null,
+            imageType: data.imageType || null,
+            isPaymentRequest: data.isPaymentRequest || false,
+            paymentAmount: data.paymentAmount || null,
+            transactionId: data.transactionId || null
           }
         ]);
       }
@@ -118,19 +135,50 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = (customMessage = null) => {
+  // Función para enviar mensajes
+  const sendMessage = (customMessage = null, imageData = null, imageType = null, isPaymentRequest = false) => {
     if (socket && isConnected) {
       const messageText = customMessage || input.trim();
       
-      if (messageText !== "") {
+      if (messageText !== "" || imageData) {
         const messageData = {
           text: messageText,
           timestamp: new Date().toISOString()
         };
         
+        // Si hay datos de imagen, añadirlos al mensaje
+        if (imageData) {
+          messageData.imageData = imageData;
+          messageData.imageType = imageType;
+        }
+        
+        // Si es una solicitud de pago, añadir la información
+        if (isPaymentRequest) {
+          messageData.isPaymentRequest = true;
+          messageData.paymentAmount = paymentData.amount;
+          messageData.transactionId = paymentData.internalTransactionReference;
+        }
+        
         socket.send(JSON.stringify(messageData));
         if (!customMessage) {
           setInput("");
+        }
+
+        // Si es una solicitud de pago, añadirla también localmente
+        // Este paso es necesario porque el servidor actual podría no manejar los nuevos campos
+        if (isPaymentRequest) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              text: messageText,
+              sender: username,
+              user_id: userId,
+              timestamp: new Date(),
+              isPaymentRequest: true,
+              paymentAmount: paymentData.amount,
+              transactionId: paymentData.internalTransactionReference
+            }
+          ]);
         }
       }
     }
@@ -150,7 +198,6 @@ const Chat = () => {
       setShowProductsList(false);
     }
   };
-  
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -181,6 +228,46 @@ const Chat = () => {
       minute: '2-digit', 
       hour12: false 
     });
+  };
+
+  // Simplificada: función para manejar los cambios en el formulario de pago
+  const handlePaymentInputChange = (e) => {
+    const { name, value } = e.target;
+    setPaymentData({
+      ...paymentData,
+      [name]: name === "amount" ? parseFloat(value) : value
+    });
+  };
+
+  // Función para generar un ID único para la transacción
+  const generateTransactionId = () => {
+    return Math.random().toString(36).substring(2, 15).toUpperCase();
+  };
+
+  // Función simplificada para procesar el pago
+  const processPayment = () => {
+    // Generar un nuevo ID de transacción único
+    const transactionId = generateTransactionId();
+    
+    // Actualizar el ID de transacción
+    setPaymentData(prev => ({
+      ...prev,
+      internalTransactionReference: transactionId
+    }));
+    
+    // Enviar mensaje con la información del pago
+    const paymentMessage = `Se ha generado una solicitud de pago por $${paymentData.amount.toFixed(2)} - ${paymentData.detail}\nID de Transferencia: ${transactionId}`;
+    
+    // Indica explícitamente que este es un mensaje de pago
+    sendMessage(paymentMessage, null, null, true);
+    
+    // Cerrar el formulario de pago
+    setShowPaymentForm(false);
+  };
+
+  // Función para redirigir al pagar
+  const goToPayment = () => {
+    navigate("/comprobante");
   };
 
   return (
@@ -239,35 +326,126 @@ const Chat = () => {
           </div>
         )}
 
+        {/* Formulario de Pago Simplificado */}
+        {showPaymentForm && (
+          <div className="payment-form-container">
+            <div className="payment-form-header">
+              <DollarSign className="payment-form-icon" />
+              <span>Solicitud de Pago</span>
+              <button 
+                className="close-form-button"
+                onClick={() => setShowPaymentForm(false)}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="payment-form">
+              <div className="form-group">
+                <label>Monto</label>
+                <input
+                  type="number"
+                  name="amount"
+                  step="0.01"
+                  value={paymentData.amount}
+                  onChange={handlePaymentInputChange}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Detalle</label>
+                <input
+                  type="text"
+                  name="detail"
+                  value={paymentData.detail}
+                  onChange={handlePaymentInputChange}
+                />
+              </div>
+              
+              <button 
+                className="generate-payment-button"
+                onClick={processPayment}
+              >
+                Generar Solicitud
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Contenedor de mensajes */}
         <div className="messages-container">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`message-wrapper ${msg.user_id === userId ? "message-own" : "message-other"}`}
-            >
+          {messages.map((msg, index) => {
+            // Verificar si es un mensaje de pago
+            const isPaymentMsg = msg.text && (
+              msg.isPaymentRequest === true || 
+              msg.text.includes("Se ha generado una solicitud de pago")
+            );
+            
+            return (
               <div
-                className={`message-bubble ${
-                  msg.user_id === userId ? "message-bubble-own" : "message-bubble-other"
-                }`}
+                key={index}
+                className={`message-wrapper ${msg.user_id === userId ? "message-own" : "message-other"}`}
               >
-                <p className="message-text" style={{ whiteSpace: 'pre-line' }}>
-                  {msg.text}
-                </p>
+                <div
+                  className={`message-bubble ${
+                    msg.user_id === userId ? "message-bubble-own" : "message-bubble-other"
+                  } ${isPaymentMsg ? "payment-message" : ""}`}
+                >
+                  {/* Texto del mensaje */}
+                  <p className="message-text" style={{ whiteSpace: 'pre-line' }}>
+                    {msg.text}
+                  </p>
+                  
+                  {/* Imagen del mensaje (si existe) */}
+                  {msg.imageData && (
+                    <div className="message-image-container">
+                      <img 
+                        src={msg.imageData.startsWith('data:') 
+                          ? msg.imageData 
+                          : `data:${msg.imageType || 'image/png'};base64,${msg.imageData}`}
+                        alt="Imagen adjunta" 
+                        className="message-image"
+                        onError={(e) => {
+                          console.error("Error loading image:", e);
+                          e.target.src = "/placeholder-qr.png"; // Fallback image
+                          e.target.style.opacity = 0.5;
+                        }}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Botón de pago (si es una solicitud de pago) */}
+                  {isPaymentMsg && (
+                    <button 
+                      className="payment-button-in-message"
+                      onClick={goToPayment}
+                    >
+                      Pagar
+                    </button>
+                  )}
+                </div>
+                {/* Hora del mensaje fuera del contenedor */}
+                {msg.timestamp && (
+                  <p className={`message-time-below ${msg.user_id === userId ? "message-time-own" : "message-time-other"}`}>
+                    {formatTime(msg.timestamp)}
+                  </p>
+                )}
               </div>
-              {/* Hora del mensaje fuera del contenedor */}
-              {msg.timestamp && (
-                <p className={`message-time-below ${msg.user_id === userId ? "message-time-own" : "message-time-other"}`}>
-                  {formatTime(msg.timestamp)}
-                </p>
-              )}
-            </div>
-          ))}
+            );
+          })}
           <div ref={messagesEndRef}></div>
         </div>
 
         {/* Barra de envío */}
         <div className="message-input-container">
+          {/* Botón de pago */}
+          <button
+            className="payment-button-trigger"
+            onClick={() => setShowPaymentForm(!showPaymentForm)}
+          >
+            <DollarSign className="payment-button-icon" />
+          </button>
+          
           <input
             type="text"
             value={input}
