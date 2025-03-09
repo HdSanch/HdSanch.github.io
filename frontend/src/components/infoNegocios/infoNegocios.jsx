@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { Star, Mail, Phone, ShoppingCart, ChevronDown, ChevronUp, Check } from "lucide-react";
-import tiendaIcon from "../../assets/icons8-tienda-96.png";
-import "./infoNegocios.css"; 
+import { Star, Mail, Phone, ShoppingCart, ChevronDown, ChevronUp, Check, ChevronLeft } from "lucide-react";
+import "./infoNegocios.css";
+import { useNavigate } from "react-router-dom"; 
+import back from "../../assets/atras.png"; 
+import usuarioImg from "../../assets/usuario.png";
+import negocioImg from "../../assets/negocio.avif";
 
 const InfoNegocios = () => {
   const [productos, setProductos] = useState([]);
-  const [expandirProductos, setExpandirProductos] = useState(true);
-  const [expandirReseñas, setExpandirReseñas] = useState(false);
+  const [expandirCatalogo, setExpandirCatalogo] = useState(true);
+  const [expandirReseñas, setExpandirReseñas] = useState(true);
   const [carrito, setCarrito] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -26,11 +29,9 @@ const InfoNegocios = () => {
   }, []);
 
   const negocio = {
-    nombre: "Tienda Ejemplo",
-    contacto: "contacto@tienda.com",
-    telefono: "+123 456 7890",
-    logo: tiendaIcon,
-    reseña: 4.5,
+    nombre: "Jimmy Design Co",
+    etiquetas: ["Diseño gráfico", "Diseño", "Logo"],
+    reseña: 8.3,
   };
 
   const toggleProducto = (producto) => {
@@ -44,80 +45,93 @@ const InfoNegocios = () => {
   };
 
   const reseñas = [
-    { texto: "Gran tienda, excelente servicio y productos de calidad.", calificacion: 5, autor: "María G." },
-    { texto: "Buenos precios y envío rápido. Repetiré compra.", calificacion: 4, autor: "Carlos P." }
+    { texto: "Excelente servicio, entrega diseños creativos y profesionales rápidamente. Superaron nuestras expectativas. Muy recomendados.", calificacion: 9, autor: "Andrea Vásquez", maxCalificacion: 10 },
+    { texto: "El diseño es bueno, pero la comunicación y los tiempos de respuesta fueron lentos. Con más organización, la experiencia habría sido mejor.", calificacion: 7.8, autor: "María Buitrón", maxCalificacion: 10 }
   ];
 
   return (
     <div className="negocio-container">
+      {/* Botón Regresar */}
+      <div className="back-button-container">
+        <button className="back-button">
+          <ChevronLeft size={20} />
+        </button>
+      </div>
+      
       {/* Encabezado y Logo */}
+      <div className="atras">
+        {/* Botón de retroceso */}
+        <img 
+          src={back} 
+          alt="Atrás" 
+          className="back-button"
+          onClick={() => navigate("/servicios")}
+        />
+      </div>
       <div className="negocio-header">
-        <img src={negocio.logo} alt="Logo" className="negocio-logo" />
-        <div>
+        <div className="logo-container">
+          <img src={negocioImg} alt="Logo" className="negocio-logo" />
+        </div>
+        <div className="negocio-details">
           <h2 className="negocio-title">{negocio.nombre}</h2>
+          <div className="negocio-tags">
+            {negocio.etiquetas.map((etiqueta, index) => (
+              <span key={index} className="negocio-tag">{etiqueta}</span>
+            ))}
+          </div>
           <div className="negocio-rating">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} 
-                    fill={i < Math.floor(negocio.reseña) ? "currentColor" : "none"} 
-                    className={`w-5 h-5 ${i < negocio.reseña ? "star-filled" : "star-empty"}`} />
+              <Star 
+                key={i} 
+                fill={i < Math.floor(negocio.reseña / 2) ? "currentColor" : "none"} 
+                className={`w-4 h-4 ${i < negocio.reseña / 2 ? "star-filled" : "star-empty"}`} 
+              />
             ))}
-            <span className="rating-score">{negocio.reseña}</span>
+            <span className="rating-score">{negocio.reseña} / 10</span>
           </div>
         </div>
-      </div>
-
-      {/* Información de Contacto */}
-      <div className="contact-grid">
-        <div className="contact-item">
-          <Mail size={18} className="contact-icon" />
-          <span className="contact-text">{negocio.contacto}</span>
-        </div>
-        <div className="contact-item">
-          <Phone size={18} className="contact-icon" />
-          <span className="contact-text">{negocio.telefono}</span>
+        <div className="contratar-container">
+          <Button className="contratar-button">
+            Contratar
+          </Button>
         </div>
       </div>
 
-      {/* Sección de Productos */}
-      <div className="products-container">
-        <button 
-          onClick={() => setExpandirProductos(!expandirProductos)}
-          className="toggle-button"
+      {/* Sección de Catálogo */}
+      <div className="catalog-container">
+        <div 
+          className="section-header toggle-header"
+          onClick={() => setExpandirCatalogo(!expandirCatalogo)}
         >
-          <span>Productos</span>
-          {expandirProductos ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-        </button>
+          <span className="section-icon">📋</span>
+          <h3 className="section-title">Catálogo</h3>
+          <div className="toggle-icon">
+            {expandirCatalogo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </div>
+        </div>
         
-        {expandirProductos && (
-          <div className="products-list">
+        {expandirCatalogo && (
+          <div className="servicios-list">
             {loading ? (
               <div className="loading-container">
                 <div className="loading-indicator"></div>
                 <p className="loading-text">Cargando productos...</p>
               </div>
             ) : (
-              productos.map((producto) => {
-                const isSelected = carrito.some(item => item.id === producto.id);
-                return (
-                  <div key={producto.id} 
-                      className={`product-item ${isSelected ? 'product-item-selected' : ''}`}
-                  >
-                    <button 
-                      onClick={() => toggleProducto(producto)}
-                      className={`product-checkbox ${isSelected ? 'product-checkbox-selected' : ''}`}
-                    >
-                      {isSelected && (
-                        <Check size={14} className="text-white" />
-                      )}
-                    </button>
-                    
-                    <div className="product-info">
-                      <h3 className="product-title">{producto.title}</h3>
-                      {/* <p className="product-price">${producto.price}</p> */}
-                    </div>
+              productos.map((producto) => (
+                <div 
+                  key={producto.id} 
+                  className={`servicio-item ${carrito.some(item => item.id === producto.id) ? 'servicio-selected' : ''}`}
+                  onClick={() => toggleProducto(producto)}
+                >
+                  <div className="servicio-info">
+                    <h3 className="servicio-title">{producto.title}</h3>
                   </div>
-                );
-              })
+                  <div className="servicio-image">
+                    <img src={producto.image} alt={producto.title} />
+                  </div>
+                </div>
+              ))
             )}
           </div>
         )}
@@ -125,40 +139,43 @@ const InfoNegocios = () => {
 
       {/* Sección de Reseñas */}
       <div className="reviews-container">
-        <button 
+        <div 
+          className="section-header toggle-header"
           onClick={() => setExpandirReseñas(!expandirReseñas)}
-          className="toggle-button"
         >
-          <span>Reseñas</span>
-          {expandirReseñas ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-        </button>
+          <span className="section-icon">💡</span>
+          <h3 className="section-title">Reseñas</h3>
+          <div className="toggle-icon">
+            {expandirReseñas ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </div>
+        </div>
         
         {expandirReseñas && (
           <div className="reviews-list">
             {reseñas.map((reseña, index) => (
               <div key={index} className="review-item">
-                <p className="review-text">"{reseña.texto}"</p>
-                <div className="review-footer">
-                  <div className="review-stars">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={14} 
-                            fill={i < reseña.calificacion ? "currentColor" : "none"}
-                            className={`${i < reseña.calificacion ? "star-filled" : "star-empty"}`} />
-                    ))}
+                <div className="review-author-container">
+                <img src={usuarioImg} alt={reseña.autor} className="review-author-image" />
+                  <div className="review-author-info">
+                    <div className="review-author-name">{reseña.autor}</div>
+                    <div className="review-rating">
+                      <Star size={14} fill="currentColor" className="star-filled" />
+                      <span className="review-score">{reseña.calificacion} / {reseña.maxCalificacion}</span>
+                    </div>
                   </div>
-                  <span className="review-author">{reseña.autor}</span>
                 </div>
+                <p className="review-text">{reseña.texto}</p>
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* Botón de Carrito */}
+      {/* Botón de Contactar */}
       <div className="cart-button-container">
         <Button 
-          disabled={carrito.length === 0}
           className={`cart-button ${carrito.length > 0 ? 'cart-button-active' : 'cart-button-disabled'}`}
+          disabled={carrito.length === 0}
         >
           <ShoppingCart size={20} />
           <span>

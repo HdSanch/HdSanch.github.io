@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import back from "../../assets/atras.png"; 
+import { useNavigate } from "react-router-dom"; 
 import "./comprobante.css";
 
 const Comprobante = () => {
@@ -8,6 +10,7 @@ const Comprobante = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [qrImage, setQrImage] = useState(null); 
+      const navigate = useNavigate();
 
     // Configuración de las APIs usando el proxy de Vite
     const API_REQUEST = "/api/merchant/v1/payment/request";
@@ -86,6 +89,15 @@ const Comprobante = () => {
 
     return (
         <div className="comprobante-container">
+            <div className="atras">
+                {/* Botón de retroceso */}
+                <img 
+                    src={back} 
+                    alt="Atrás" 
+                    className="back-button"
+                    onClick={() => navigate("/negocio")}
+                />
+            </div>
             <div className="comprobante-header">
                 <h2 className="comprobante-title">Comprobante de Pago</h2>
                 {transactionId && (
