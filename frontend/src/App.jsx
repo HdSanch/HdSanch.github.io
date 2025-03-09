@@ -9,9 +9,8 @@ function App() {
       <div className="p-4">
         <Routes>
           <Route path="/negocio" element={<InfoNegocios />} />
-          <Route path="*" element={<Navigate to="/negocio" />} /> {/* Redirige a /negocio */}
-          <Route path="/comprobante" element={<InfoNegocios />} />
-          <Route path="*" element={<Navigate to="/comprobante" />} /> {/* Redirige a /negocio */}
+          <Route path="/comprobante" element={<Comprobante />} />
+          <Route path="*" element={<Navigate to="/negocio" />} /> {/* Redirige a /negocio por defecto */}
         </Routes>
       </div>
     </Router>
