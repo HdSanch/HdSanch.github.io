@@ -24,7 +24,8 @@ const Chat = () => {
   const navigate = useNavigate();
 
   // Configuración de las APIs
-  const API_REQUEST = "/api/merchant/v1/payment/request";
+  // const API_REQUEST = "/api/merchant/v1/payment/request";
+  const API_REQUEST = `${import.meta.env.VITE_API_URL}/api/merchant/v1/payment/request`;
 
   // Inicializar usuario y conectar WebSocket
   useEffect(() => {
