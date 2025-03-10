@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import InfoNegocios from "./components/infoNegocios/InfoNegocios";
+import InfoNegocios from "./components/infoNegocios/infoNegocios";
 import ChatPage from "./components/chats/ChatP2P"; // Importamos la nueva página del chat
 import Comprobante from "./components/comprobante/comprobante";
 import Home from "./Pages/home";
