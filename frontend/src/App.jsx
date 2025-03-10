@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import InfoNegocios from "./components/infoNegocios/infoNegocios";
-import ChatPage from "./components/chats/ChatP2P"; // Importamos la nueva página del chat
-import Comprobante from "./components/comprobante/comprobante";
-import Home from "./Pages/home";
-import Servicios from "./Pages/servicios";
+import InfoNegocios from "./components/infoNegocios/infoNegocios.jsx";
+import ChatPage from "./components/chats/ChatP2P.jsx"; // Importamos la nueva página del chat
+import Comprobante from "./components/comprobante/comprobante.jsx";
+import Home from "./Pages/home.jsx";
+import Servicios from "./Pages/servicios.jsx";
 
 function App() {
   return (
