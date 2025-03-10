@@ -4,7 +4,7 @@ import InfoNegocios from "./components/infoNegocios/infoNegocios.jsx";
 import ChatPage from "./components/chats/ChatP2P.jsx"; // Importamos la nueva página del chat
 import Comprobante from "./components/comprobante/comprobante.jsx";
 import Home from "./Pages/home.jsx";
-import Servicios from "./Pages/servicios.jsx";
+import Servicios from "./Pages/Servicios.jsx";
 
 function App() {
   return (
