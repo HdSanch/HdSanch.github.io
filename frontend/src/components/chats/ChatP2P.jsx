@@ -97,7 +97,8 @@ const Chat = () => {
 
   const connectWebSocket = (userId, username) => {
     // const ws = new WebSocket(`ws://localhost:8000/ws/${userId}`);
-    const ws = new WebSocket(`wss://deuna-backend.onrender.com/ws/${userId}`);
+    // const ws = new WebSocket(`wss://deuna-backend.onrender.com/ws/${userId}`);
+    const ws = new WebSocket(`wss://hdsanchgithubio-production.up.railway.app/ws/${userId}`);
     
     ws.onopen = () => {
       console.log("Conexión WebSocket establecida");
