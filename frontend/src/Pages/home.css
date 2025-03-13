@@ -3,7 +3,7 @@
   font-family: 'Montserrat', Arial, sans-serif; /* Cambio a fuente más moderna */
   background-color: #f8f9fa; /* Fondo más suave */
   padding: 20px 15px; /* Padding más consistente */
-  max-width: 430px;
+  width: 100%;
   margin: auto;
   padding-bottom: 20px;
 }
