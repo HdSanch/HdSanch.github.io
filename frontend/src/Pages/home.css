@@ -1,24 +1,26 @@
 /* Estilos generales con mejoras estéticas */
 .home-container {
   font-family: 'Montserrat', Arial, sans-serif;
+  background-color: #f8f9fa;
   padding: 15px 10px;
   width: 100%;
   max-width: 375px;
   margin: 0;
   box-sizing: border-box;
   overflow-y: auto;
-  height: 100%;
 }
 
 #root {
+  /* Mantener los valores originales de tu index.css */
+  width: 375px;
+  min-height: 714px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #f8f9fa;
   padding: 0 !important;
   overflow-y: auto;
-  width: 375px;
-  height: 100%;
   box-sizing: border-box;
 }
 
@@ -381,4 +383,9 @@
 /* Asegurarse de que el contenido no se salga */
 * {
   box-sizing: border-box;
+}
+
+/* Anular el padding del root que viene de app.css */
+#root {
+  padding: 0 !important;
 }
